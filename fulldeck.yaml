@@ -1,0 +1,212 @@
+swagger: '2.0'
+info:
+  description: SharedChain FullDeck API
+  version: 1.0.0
+  title: FullDeck API
+  termsOfService: 'https://fulldeck.io/terms/'
+  contact:
+    email: apiteam@ultri.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: fulldeck.ultrinet.com
+basePath: /v2
+tags:
+  - name: shoe
+    description: Shoe level actions
+  - name: card
+    description: Card level actions
+schemes:
+  - https
+  - http
+paths:
+  /shoe/shuffled:
+    post:
+      tags:
+        - shoe
+      summary: Receive a new shuffled shoe based on the ShoeRequest
+      description: Returns a shuffled Shoe
+      operationId: fetchShuffledShoe
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: A ShoeRequest object
+          required: true
+          schema:
+            $ref: '#/definitions/ShoeRequest'
+      responses:
+        '200':
+          description: generated requested shoe
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Shoe'
+        '400':
+          description: Invalid shoeRequest
+  /shoe/encrypted:
+    post:
+      tags:
+        - shoe
+      summary: Receive a new shuffled shoe based on the ShoeRequest
+      description: Returns a shuffled and ecnrypted Shoe
+      operationId: fetchEncryptedShoe
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: A ShoeRequest object
+          required: true
+          schema:
+            $ref: '#/definitions/ShoeRequest'
+      responses:
+        '200':
+          description: generated requested shoe
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Shoe'
+        '400':
+          description: Invalid shoeRequest
+  /card/deal:
+    post:
+      tags:
+        - card
+      summary: Have a card decrypted for one or more players
+      description: Returns an encrypted card
+      operationId: fetchDealtCard
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: A DealRequest object
+          required: true
+          schema:
+            $ref: '#/definitions/DealRequest'
+      responses:
+        '200':
+          description: generated requested shoe
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Card'
+        '400':
+          description: Invalid dealRequest
+definitions:
+  DealRequest:
+    type: object
+    properties:
+      card:
+        $ref: '#/definitions/Card'
+      forPlayers:
+        type: array
+        items: 
+          type: string
+      players:
+        type: array
+        items: 
+          $ref: '#/definitions/Player'
+  ShoeRequest:
+    type: object
+    properties:
+      numDecks:
+        type: integer
+        format: int32
+      deckDefinition:
+        $ref: '#/definitions/DeckDefinition'
+      players:
+        type: array
+        items:
+          $ref: '#/definitions/Player'
+  Shoe:
+    type: object
+    properties:
+      shoeRequest:
+        $ref: '#/definitions/ShoeRequest'
+      cards:
+        type: array
+        items:
+          $ref: '#/definitions/Card'
+  DeckDefinition:
+    type: object
+    properties:
+      suits:
+        type: array
+        items: 
+          type: string
+      ranks:
+        type: array
+        items: 
+          type: string
+      jokers:
+        type: integer
+        format: int32
+  Player:
+    type: object
+    required:
+      - name
+      - photoUrls
+    properties:
+      alias:
+        type: string
+      keys:
+        type: array
+        items:
+          $ref: '#/definitions/Keys'
+  Card:
+    type: object
+    properties:
+      suit:
+        type: string
+      rank:
+        type: string
+      encrypted:
+        type: string
+      newSecrets:
+        type: array
+        items:
+         $ref: '#/definitions/NewSecret' 
+  Keys:
+    type: object
+    properties:
+      verify:
+        $ref: '#/definitions/PPK'
+      crypt:
+        $ref: '#/definitions/PPK'
+      session: 
+        type: array
+        items: 
+          $ref: '#/definitions/SharedKey'
+  PPK:
+    type: object
+    properties:
+      publicKey:
+        type: string
+      privateKey:
+        type: string
+  SharedKey:
+    type: object
+    properties:
+      sessionId:
+        type: string
+      secret:
+        type: string
+  NewSecret:
+    type: object
+    properties:
+      alias:
+        type: string
+      secret:
+        type: string
+externalDocs:
+  description: Find out more about Swagger
+  url: 'https://fulldeck.ultrinet.com'
