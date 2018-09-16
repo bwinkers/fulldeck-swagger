@@ -158,10 +158,8 @@ definitions:
     properties:
       alias:
         type: string
-      keys:
-        type: array
-        items:
-          $ref: '#/definitions/Keys'
+      key:
+        type: string
   Card:
     type: object
     properties:
@@ -175,38 +173,6 @@ definitions:
         type: array
         items:
          $ref: '#/definitions/NewSecret' 
-  Keys:
-    type: object
-    properties:
-      verify:
-        $ref: '#/definitions/PPK'
-      crypt:
-        $ref: '#/definitions/PPK'
-      session: 
-        type: array
-        items: 
-          $ref: '#/definitions/SharedKey'
-  PPK:
-    type: object
-    properties:
-      publicKey:
-        type: string
-      privateKey:
-        type: string
-  SharedKey:
-    type: object
-    properties:
-      sessionId:
-        type: string
-      secret:
-        type: string
-  NewSecret:
-    type: object
-    properties:
-      alias:
-        type: string
-      secret:
-        type: string
 externalDocs:
   description: Find out more about Swagger
   url: 'https://fulldeck.ultrinet.com'
