@@ -169,10 +169,6 @@ definitions:
         type: string
       encrypted:
         type: string
-      newSecrets:
-        type: array
-        items:
-         $ref: '#/definitions/NewSecret' 
 externalDocs:
   description: Find out more about Swagger
   url: 'https://fulldeck.ultrinet.com'
